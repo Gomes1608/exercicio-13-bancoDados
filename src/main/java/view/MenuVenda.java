@@ -1,12 +1,18 @@
 package view;
 
+import dao.VendaDAO;
 import dao.VendedorDAO;
+import model.Venda;
 import model.Vendedor;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
+import static java.lang.Double.parseDouble;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static javax.swing.JOptionPane.showInputDialog;
+import static javax.swing.JOptionPane.*;
 
 public class MenuVenda {
     public void menu(){
@@ -41,6 +47,7 @@ public class MenuVenda {
     }
 
     private void listar() {
+
     }
 
     private void inserir() {
@@ -48,13 +55,22 @@ public class MenuVenda {
         double total;
         String data;
         Vendedor vendedor;
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        vendedor = showInputDialog(null,
+        vendedor = (Vendedor)showInputDialog(null,
                 "Selecione um vendedor",
                 "--- MENU PRINCIPAL ---",
                 INFORMATION_MESSAGE,
                 null,
                 lista.toArray(),
                 lista.get(0));
+
+        total = parseDouble(showInputDialog("Total das vendas"));
+        data = showInputDialog("Data da Venda");
+        Venda venda = new Venda();
+        venda.setTotal(total);
+        venda.setVendedor(vendedor);
+        venda.setData(LocalDate.parse(data, formato));
+        new VendaDAO().inserir(venda);
     }
 }
