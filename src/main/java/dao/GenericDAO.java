@@ -7,5 +7,7 @@ public interface GenericDAO<T, ID> {
     public void inserir(T entidade);
     public List<T> listar();
     public Optional<T> buscaPorID(ID id);
+    public void atualizar(T entidade);
+    public void excluir(ID id);
 
 }

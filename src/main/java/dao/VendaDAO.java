@@ -19,7 +19,7 @@ public class VendaDAO implements GenericDAO<Venda, Integer>{
         try(Connection connection = ConnectionFactory.obterConexao();
             PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1,entidade.getVendedor().getId());
-            ps.setDouble(1,entidade.getTotal());
+            ps.setDouble(2,entidade.getTotal());
             ps.execute();
         }
         catch (SQLException e){
@@ -48,6 +48,42 @@ public class VendaDAO implements GenericDAO<Venda, Integer>{
 
     @Override
     public Optional<Venda> buscaPorID(Integer integer) {
+
         return Optional.empty();
+    }
+
+    @Override
+    public void atualizar(Venda entidade) {
+
+    }
+
+    @Override
+    public void excluir(Integer integer) {
+
+    }
+    public List<Venda> relatorio(){
+        List<Venda> lista = new ArrayList<>();
+        String sql ="select v.nome, vd.total, vd.data "+
+                "from java_vendedor v "+
+                "inner join java_venda vd "+
+                "on v.id = bd.id_vendedor";
+
+        try(Connection connection = ConnectionFactory.obterConexao();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
+            while (rs.next()){
+                Vendedor vendedor = new Vendedor();
+                Venda venda = new Venda();
+                vendedor.setNome(rs.getNString("nome"));
+                venda.setTotal(rs.getDouble("total"));
+                venda.setData(rs.getDate("data").toLocalDate());
+                venda.setVendedor(vendedor);
+                lista.add(venda);
+            }
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return lista;
     }
 }

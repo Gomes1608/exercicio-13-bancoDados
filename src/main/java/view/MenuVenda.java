@@ -17,7 +17,7 @@ import static javax.swing.JOptionPane.*;
 public class MenuVenda {
     public void menu(){
         String[] item ={"Inserir","Listar","Pesquisar","Atualizar",
-                "Excluir","Sair"};
+                "Relatório","Excluir","Sair"};
         String opcao;
         do {
             opcao =(String)showInputDialog(null,
@@ -29,12 +29,24 @@ public class MenuVenda {
                     item[0]);
             switch(opcao.toLowerCase()){
                 case "inserir" -> inserir();
+                case "relatório" -> relatorio();
                 case "listar" -> listar();
                 case "pesquisar" -> pesquisar();
                 case "atualizar" -> atualizar();
                 case "excluir" -> excluir();
             }
         }while(!opcao.toLowerCase().equals("sair"));
+    }
+
+    private void relatorio() {
+        List<Venda> lista = new VendaDAO().relatorio();
+        String aux ="";
+        for (Venda venda: lista){
+            aux+= venda.getVendedor().getNome() +" | ";
+            aux+= venda.getTotal() + " | ";
+            aux+= venda.getData()+"\n";
+        }
+        showMessageDialog(null,aux);
     }
 
     private void excluir() {
